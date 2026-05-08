@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EverShift — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg:           #fafafa;
+  --bg-elevated:  #ffffff;
+  --bg-inset:     #f3f4f6;
+  --text:         #1f2937;
+  --text-soft:    #4b5563;
+  --text-mute:    #6b7280;
+  --text-faint:   #9ca3af;
+  --accent:       #14b8a6;
+  --accent-bright:#0d9488;
+  --accent-glow:  rgba(20, 184, 166, 0.18);
+  --accent-line:  rgba(20, 184, 166, 0.25);
+  --line:         #e5e7eb;
+  --line-warm:    #d1d5db;
+  --serif:    'Fraunces', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+  --mono:     'JetBrains Mono', ui-monospace, monospace;
+  --ease:     cubic-bezier(0.22, 1, 0.36, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text-soft);
+  font-family: var(--sans); font-size: 1.0625rem; line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11"; overflow-x: hidden;
+}
+::selection { background: var(--accent); color: #fff; }
+body::before {
+  content: ''; position: fixed; inset: -10% -10% auto -10%; height: 70vh;
+  background:
+    radial-gradient(ellipse 60% 100% at 50% 0%, rgba(20, 184, 166, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 100% at 20% 10%, rgba(20, 184, 166, 0.04) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1   0 0 0 0 0.1   0 0 0 0 0.1   0 0 0 0.03 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.4; pointer-events: none; z-index: 1; mix-blend-mode: overlay;
+}
+a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--accent-line); transition: border-color 200ms; }
+a:hover { border-bottom-color: var(--accent-bright); }
+h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; color: var(--text); letter-spacing: -0.02em; }
+.wrap   { max-width: 1100px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 2; }
+section { padding: 9rem 0; position: relative; z-index: 2; }
+section + section { border-top: 1px solid var(--line); }
+.eye {
+  font-family: var(--mono); font-size: 0.72rem;
+  text-transform: uppercase; letter-spacing: 0.22em;
+  color: var(--accent-bright); margin-bottom: 2.5rem;
+  display: flex; align-items: center; gap: 0.85rem;
+}
+.eye::before { content: ''; width: 32px; height: 1px; background: var(--accent-bright); }
+.top {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(250, 250, 250, 0.75);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line); padding: 1.1rem 2rem;
+  font-family: var(--mono); font-size: 0.78rem; color: var(--text-mute);
+  display: flex; justify-content: space-between; align-items: center;
+  letter-spacing: 0.02em;
+}
+.top .left, .top .right { display: flex; gap: 1.25rem; align-items: center; }
+.top .name { color: var(--text); font-weight: 600; letter-spacing: 0.08em; }
+.top .live { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent-bright); }
+.top .live::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent-bright); box-shadow: 0 0 8px var(--accent-glow);
+  animation: live 2s ease-in-out infinite;
+}
+@keyframes live { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+.top a { border: none; color: var(--text-mute); }
+.top a:hover { color: var(--text); }
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 800ms var(--ease), transform 800ms var(--ease);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 80ms; }
+.reveal.d2 { transition-delay: 160ms; }
+.reveal.d3 { transition-delay: 240ms; }
+.reveal.d4 { transition-delay: 320ms; }
+
+.hero { padding: 12rem 0 8rem; }
+.hero h1 {
+  font-family: var(--serif); font-weight: 500;
+  font-size: clamp(2.75rem, 7.5vw, 6rem); line-height: 1.0;
+  letter-spacing: -0.035em; max-width: 22ch;
+  margin-bottom: 2.5rem; color: var(--text);
+}
+.hero h1 em { font-style: italic; font-weight: 400; color: var(--accent-bright); font-variation-settings: "opsz" 144; }
+.hero .lede { font-size: 1.3rem; line-height: 1.55; color: var(--text-soft); max-width: 60ch; margin-bottom: 3rem; }
+.hero .meta {
+  font-family: var(--mono); font-size: 0.78rem; color: var(--text-mute);
+  display: flex; flex-wrap: wrap; gap: 2rem;
+  margin-top: 4rem; padding-top: 2rem;
+  border-top: 1px solid var(--line); letter-spacing: 0.05em;
+}
+.hero .meta div { display: flex; flex-direction: column; gap: 0.4rem; }
+.hero .meta .k { color: var(--text-faint); text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.18em; }
+.hero .meta .v { color: var(--text); }
+.cta {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  padding: 1rem 1.75rem; background: var(--accent); color: #fff;
+  font-family: var(--sans); font-size: 1rem; font-weight: 600;
+  border: 1px solid var(--accent); border-radius: 2px;
+  transition: background 200ms, transform 200ms;
+}
+.cta:hover { background: var(--accent-bright); border-color: var(--accent-bright); transform: translateY(-1px); border-bottom: 1px solid var(--accent-bright); }
+.cta::after { content: '→'; transition: transform 200ms; }
+.cta:hover::after { transform: translateX(3px); }
+.cta-ghost {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 1rem 0; margin-left: 2rem;
+  color: var(--text-soft); font-family: var(--sans); font-size: 1rem;
+  border: none; border-bottom: 1px solid var(--line);
+}
+.cta-ghost:hover { color: var(--text); border-bottom-color: var(--accent-bright); }
+
+.dual { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 5rem; padding-top: 4rem; border-top: 1px solid var(--line); }
+.dual .card { position: relative; }
+.dual .card::before {
+  content: attr(data-num); font-family: var(--mono); font-size: 0.7rem;
+  letter-spacing: 0.3em; color: var(--accent-bright); text-transform: uppercase;
+  display: block; margin-bottom: 1rem;
+}
+.dual h3 { font-family: var(--serif); font-weight: 500; font-size: 1.5rem; line-height: 1.2; margin-bottom: 1rem; color: var(--text); }
+.dual p { color: var(--text-soft); font-size: 1rem; line-height: 1.65; }
+
+.h2-intro { font-size: clamp(2rem, 4.5vw, 3.5rem); line-height: 1.1; max-width: 22ch; margin-bottom: 1.5rem; }
+.h2-intro + .lede { font-size: 1.15rem; color: var(--text-soft); max-width: 65ch; margin-bottom: 0; }
+
+.cards { display: grid; gap: 1.5rem; margin-top: 3rem; }
+.cards.c2 { grid-template-columns: 1fr 1fr; }
+.cards.c4 { grid-template-columns: repeat(4, 1fr); }
+.cards.c5 { grid-template-columns: repeat(5, 1fr); }
+.card-block {
+  padding: 2rem; border: 1px solid var(--line); background: var(--bg);
+  border-radius: 2px; transition: border-color 250ms, transform 250ms var(--ease);
+}
+.card-block:hover { border-color: var(--accent-line); transform: translateY(-2px); }
+.card-block .label {
+  font-family: var(--mono); font-size: 0.7rem;
+  text-transform: uppercase; letter-spacing: 0.22em;
+  color: var(--accent-bright); margin-bottom: 1rem;
+}
+.card-block h3 { font-family: var(--serif); font-weight: 500; font-size: 1.2rem; line-height: 1.3; margin-bottom: 0.85rem; color: var(--text); letter-spacing: -0.015em; }
+.card-block p { color: var(--text-soft); font-size: 0.98rem; line-height: 1.6; }
+
+.process-meta {
+  margin-top: 2.5rem; padding: 2.5rem 3rem;
+  border-left: 2px solid var(--accent);
+  background: var(--bg-elevated); border-radius: 2px;
+}
+.process-meta .label {
+  font-family: var(--mono); font-size: 0.72rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--accent-bright); margin-bottom: 1rem;
+}
+.process-meta p {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.2rem; line-height: 1.55;
+  color: var(--text); letter-spacing: -0.005em;
+}
+.process-meta p code {
+  font-family: var(--mono); font-style: normal; font-size: 0.95rem;
+  background: var(--bg-inset); padding: 1px 7px;
+  border-radius: 2px; color: var(--accent-bright);
+  border: 1px solid var(--line);
+}
+
+.psr { margin-top: 3rem; }
+.psr .step { padding: 3rem 0; display: grid; grid-template-columns: 220px 1fr; gap: 4rem; align-items: start; border-top: 1px solid var(--line); }
+.psr .step:last-child { border-bottom: 1px solid var(--line); }
+.psr .step .label { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--accent-bright); padding-top: 0.7rem; }
+.psr .step h3 { font-family: var(--serif); font-weight: 500; font-size: 1.85rem; line-height: 1.2; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+.psr .step p { color: var(--text-soft); font-size: 1.0625rem; line-height: 1.65; }
+
+.viz { margin-top: 4rem; padding: 2.5rem; border: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%); border-radius: 2px; overflow-x: auto; }
+.viz-cap { font-family: var(--mono); font-size: 0.72rem; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.22em; margin-bottom: 1.5rem; }
+.viz-svg { display: block; max-width: 100%; height: auto; }
+.arch-svg .col-title { font-family: var(--mono); font-weight: 500; font-size: 11px; fill: var(--text); letter-spacing: 0.3em; }
+.arch-svg .col-sub   { font-family: var(--mono); font-size: 9px;  fill: var(--text-faint); letter-spacing: 0.18em; }
+.arch-svg .layer-name{ font-family: var(--serif); font-weight: 500; font-size: 13px; fill: var(--text); }
+.arch-svg .layer-detail{font-family: var(--mono); font-size: 10px; fill: var(--text-mute); }
+.arch-svg .rect      { fill: var(--bg-inset); stroke: var(--line-warm); stroke-width: 1; }
+.arch-svg .rect.accent{stroke: var(--accent); stroke-width: 1.5; }
+.arch-svg .arrow     { stroke: var(--accent); stroke-width: 1.2; fill: none; opacity: 0.6; marker-end: url(#arrowA); }
+.arch-svg .layer-num { font-family: var(--mono); font-size: 10px; fill: var(--accent-bright); letter-spacing: 0.1em; }
+
+.algo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+.math {
+  background: var(--bg-inset); border: 1px solid var(--line);
+  border-left: 2px solid var(--accent);
+  padding: 1.5rem 1.75rem; border-radius: 2px;
+  font-family: var(--mono); font-size: 0.92rem;
+  color: var(--text-soft); line-height: 1.85; margin: 1.5rem 0;
+}
+.math .v { color: var(--text); font-weight: 500; }
+.math .o { color: var(--accent-bright); }
+.math .c { color: var(--text-faint); font-style: italic; }
+.detector-list { margin-top: 3rem; }
+.detector { display: grid; grid-template-columns: 60px 1fr 130px; gap: 2rem; align-items: baseline; padding: 1.5rem 0; border-top: 1px solid var(--line); transition: padding 250ms var(--ease); }
+.detector:hover { padding-left: 1rem; padding-right: 1rem; background: var(--bg-elevated); }
+.detector:last-child { border-bottom: 1px solid var(--line); }
+.detector .num { font-family: var(--mono); font-size: 0.85rem; color: var(--accent-bright); letter-spacing: 0.15em; }
+.detector h4 { font-family: var(--serif); font-weight: 500; font-size: 1.1rem; color: var(--text); margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+.detector .desc { color: var(--text-soft); font-size: 0.95rem; line-height: 1.55; }
+.detector .desc code { font-family: var(--mono); font-size: 0.82rem; color: var(--text-mute); background: transparent; }
+.detector .threshold { font-family: var(--mono); font-size: 0.85rem; color: var(--accent-bright); text-align: right; letter-spacing: 0.05em; }
+
+.callout { margin-top: 3rem; padding: 2.5rem 3rem; border-left: 2px solid var(--accent); background: var(--bg-elevated); }
+.callout .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 1rem; }
+.callout p { font-family: var(--serif); font-style: italic; font-size: 1.2rem; line-height: 1.5; color: var(--text); }
+
+.bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--line); margin-top: 4rem; border: 1px solid var(--line); }
+.feat { background: var(--bg); padding: 2.25rem; transition: background 250ms; }
+.feat:hover { background: var(--bg-elevated); }
+.feat .num { font-family: var(--mono); font-size: 0.7rem; color: var(--accent-bright); letter-spacing: 0.22em; margin-bottom: 0.85rem; }
+.feat h3 { font-family: var(--serif); font-weight: 500; font-size: 1.25rem; line-height: 1.25; margin-bottom: 0.85rem; color: var(--text); letter-spacing: -0.01em; }
+.feat p { color: var(--text-soft); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem; }
+.feat .tech { display: inline-block; font-family: var(--mono); font-size: 0.7rem; color: var(--text-mute); border: 1px solid var(--line-warm); padding: 0.2rem 0.55rem; border-radius: 2px; margin-bottom: 1rem; }
+.feat .witty { font-family: var(--serif); font-style: italic; font-size: 0.95rem; color: var(--text-mute); border-top: 1px solid var(--line); padding-top: 1rem; }
+.feat.s4 { grid-column: span 4; }
+.feat.s3 { grid-column: span 3; }
+.feat.s2 { grid-column: span 2; }
+.feat.s6 { grid-column: span 6; }
+
+.exhibit { margin-top: 4rem; }
+.exhibit .label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 1rem; }
+.exhibit h3 { font-family: var(--serif); font-weight: 500; font-size: 1.85rem; line-height: 1.2; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+.exhibit .story { color: var(--text-soft); font-size: 1.0625rem; line-height: 1.65; margin-bottom: 2.5rem; max-width: 70ch; }
+.code-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); }
+.code-pair .col { background: var(--bg-inset); padding: 1.5rem; }
+.code-pair .col .tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; display: block; }
+.code-pair .before .tag { color: var(--text-faint); }
+.code-pair .after  .tag { color: var(--accent-bright); }
+pre { font-family: var(--mono); font-size: 0.78rem; line-height: 1.7; color: var(--text-soft); background: transparent; white-space: pre; overflow-x: auto; }
+
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 4rem; border: 1px solid var(--line); }
+.metric { padding: 2.5rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg); transition: background 250ms; }
+.metric:hover { background: var(--bg-elevated); }
+.metric:nth-child(3n) { border-right: none; }
+.metric:nth-last-child(-n+3) { border-bottom: none; }
+.metric .lbl { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.22em; color: var(--text-mute); margin-bottom: 1.25rem; }
+.metric .val { font-family: var(--serif); font-weight: 500; font-size: 3.25rem; line-height: 1; color: var(--text); letter-spacing: -0.03em; }
+.metric .val .unit { font-size: 1.4rem; color: var(--text-mute); margin-left: 0.3rem; font-style: italic; font-weight: 400; }
+.metric .desc { margin-top: 1.25rem; font-size: 0.92rem; color: var(--text-soft); line-height: 1.6; }
+
+.decisions { margin-top: 3rem; }
+details.decision { border-top: 1px solid var(--line); padding: 2rem 0; }
+details.decision:last-of-type { border-bottom: 1px solid var(--line); }
+details.decision summary { cursor: pointer; list-style: none; display: grid; grid-template-columns: 60px 1fr auto; gap: 2rem; align-items: baseline; }
+details.decision summary::-webkit-details-marker { display: none; }
+details.decision .qnum { font-family: var(--mono); font-size: 0.85rem; color: var(--accent-bright); letter-spacing: 0.2em; }
+details.decision .q { font-family: var(--serif); font-weight: 500; font-size: 1.3rem; line-height: 1.3; color: var(--text); letter-spacing: -0.015em; }
+details.decision .arrow { font-family: var(--mono); font-size: 0.9rem; color: var(--text-mute); transition: transform 250ms; }
+details.decision[open] .arrow { transform: rotate(45deg); color: var(--accent-bright); }
+details.decision .body { margin-top: 1.5rem; padding-left: calc(60px + 2rem); display: flex; flex-direction: column; gap: 1.25rem; color: var(--text-soft); max-width: 75ch; }
+details.decision .short { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--accent-bright); line-height: 1.4; }
+details.decision .long { font-size: 1rem; line-height: 1.7; }
+
+.timeline { margin-top: 4rem; }
+.phase { display: grid; grid-template-columns: 240px 1fr; gap: 3rem; padding: 3rem 0; border-top: 1px solid var(--line); align-items: start; }
+.phase:last-child { border-bottom: 1px solid var(--line); }
+.phase .meta { display: flex; flex-direction: column; gap: 0.75rem; }
+.phase .pnum { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.22em; color: var(--accent-bright); text-transform: uppercase; }
+.phase .ptitle { font-family: var(--serif); font-weight: 500; font-size: 1.25rem; line-height: 1.2; color: var(--text); letter-spacing: -0.015em; }
+.phase .mood { font-family: var(--mono); font-size: 0.72rem; color: var(--text-mute); letter-spacing: 0.15em; text-transform: uppercase; }
+.phase .story { color: var(--text-soft); font-size: 1.0625rem; line-height: 1.65; margin-bottom: 1rem; }
+.phase .story strong { color: var(--text); font-weight: 500; font-family: var(--serif); font-style: italic; }
+.phase .deliverable { font-family: var(--mono); font-size: 0.85rem; color: var(--accent-bright); border-left: 1px solid var(--accent); padding-left: 1rem; line-height: 1.5; }
+
+.reflection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+.reflection-grid .block { padding-top: 1.5rem; border-top: 1px solid var(--accent); }
+.reflection-grid .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.22em; color: var(--accent-bright); margin-bottom: 1rem; }
+.reflection-grid h3 { font-family: var(--serif); font-weight: 500; font-size: 1.5rem; line-height: 1.2; color: var(--text); margin-bottom: 1rem; letter-spacing: -0.015em; }
+.reflection-grid p { color: var(--text-soft); font-size: 1rem; line-height: 1.65; }
+
+footer.recursive { padding: 10rem 0 6rem; border-top: 1px solid var(--line); position: relative; background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(20, 184, 166, 0.08) 0%, transparent 60%); }
+footer.recursive h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem, 4.5vw, 3.5rem); line-height: 1.15; letter-spacing: -0.025em; max-width: 28ch; margin-bottom: 2rem; }
+footer.recursive .cta-line { color: var(--text-soft); font-size: 1.2rem; line-height: 1.55; margin-bottom: 3rem; max-width: 50ch; }
+footer.recursive .next { margin-top: 6rem; padding-top: 2rem; border-top: 1px solid var(--line); color: var(--text-mute); font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.05em; }
+
+.integrity { background: var(--bg-inset); padding: 3rem 2rem; font-family: var(--mono); font-size: 0.78rem; color: var(--text-mute); line-height: 1.7; border-top: 1px solid var(--line); }
+.integrity .row { max-width: 1100px; margin: 0 auto; }
+.integrity strong { color: var(--text-soft); font-weight: 500; }
+.integrity em { color: var(--accent-bright); font-style: normal; }
+
+@media (max-width: 1000px) {
+  section { padding: 6rem 0; }
+  .hero { padding: 8rem 0 5rem; }
+  .dual, .algo-grid, .reflection-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .cards.c4, .cards.c5 { grid-template-columns: 1fr 1fr; }
+  .psr .step, .phase { grid-template-columns: 1fr; gap: 1.5rem; }
+  .detector { grid-template-columns: 50px 1fr; }
+  .detector .threshold { grid-column: 1 / -1; padding-left: 50px; text-align: left; }
+  details.decision summary { grid-template-columns: 50px 1fr; }
+  details.decision .arrow { display: none; }
+  details.decision .body { padding-left: calc(50px + 2rem); }
+  .bento { grid-template-columns: 1fr; }
+  .feat.s4, .feat.s3, .feat.s2, .feat.s6 { grid-column: span 1; }
+  .code-pair { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: 1fr; }
+  .metric { border-right: none; }
+  .metric:not(:last-child) { border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 640px) { .cards.c4, .cards.c5 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="left">
+    <span class="name">EVERSHIFT</span>
+    <span style="color: var(--text-faint);">·</span>
+    <span>Portfolio piece 04 / 09</span>
+  </div>
+  <div class="right">
+    <span class="live">v2.0.0 shipped</span>
+    <span>Next.js · PostgreSQL · PWA</span>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eye reveal">01 · The Hook</div>
+    <h1 class="reveal d1">I built an economy for nursing teams — because asking someone to cover your night shift deserves better than a group chat and a <em>prayer.</em></h1>
+    <p class="lede reveal d2">
+      Solo build of ShiftGenie 2.0: Next.js 14 + TypeScript + PostgreSQL + Prisma + NextAuth + Redis + Vercel Edge.
+      A ShiftCoin virtual currency values every shift by demand, time, and desirability.
+      A 15-minute Redis reservation lock prevents race conditions.
+      A 4-tier approval matrix routes low-risk trades to auto-approval and high-risk trades to manager review.
+      Unit competency gating ensures the nurse taking your shift is actually qualified.
+    </p>
+    <div class="reveal d3">
+      <a class="cta" href="#process">Read the process</a>
+      <a class="cta-ghost" href="#architecture">See the architecture</a>
+    </div>
+    <div class="meta reveal d4">
+      <div><span class="k">Role</span><span class="v">Solo · concept → v2.0.0</span></div>
+      <div><span class="k">Phases</span><span class="v">5 · research → arch → build → harden → ship</span></div>
+      <div><span class="k">Stack</span><span class="v">Next.js 14 · Prisma · PostgreSQL · Redis</span></div>
+      <div><span class="k">Tests</span><span class="v">Vitest · type-safe · no PHI</span></div>
+    </div>
+    <div class="dual">
+      <div class="card reveal" data-num="For the curious passenger">
+        <h3>Nursing teams trade shifts constantly — but the process is usually a chaotic group chat, a favor economy, or a manager spreadsheet.</h3>
+        <p>This platform turns shift trading into a fair marketplace: shifts are priced by a virtual currency that reflects real demand, trades are locked for 15 minutes so two people can't claim the same shift, and a competency check ensures the replacement is actually qualified for the unit.</p>
+      </div>
+      <div class="card reveal d1" data-num="For the engineer in the back">
+        <h3>Next.js 14 App Router with Server Components, 70% reduced client JS.</h3>
+        <p>TypeScript 5.3 strict, PostgreSQL 15 with Prisma 5.7 ORM, NextAuth.js 4.24 with JWT sessions and bcrypt-hashed credentials, Zustand client state, Zod validation on every input, Upstash Redis for distributed rate limiting and 15-minute reservation locks, shadcn/ui + Radix primitives accessible components, Tailwind CSS with Clinical Modern Palette. RBAC with three roles. No PHI stored — HIPAA-aware by architecture. Deployed to Vercel Edge Network.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">02 · The bet</div>
+    <h2 class="reveal d1 h2-intro">Why I picked this fight.</h2>
+    <p class="lede reveal d2">Four short answers to the four questions every project should be able to answer before the first commit.</p>
+    <div class="cards c4">
+      <div class="card-block reveal">
+        <div class="label">Signal</div>
+        <h3>Healthcare shift scheduling is broken.</h3>
+        <p>Nurse managers spend hours on the phone. Group chats are chaotic. The favor economy burns out the same people. Existing scheduling software is top-down and rigid — it doesn't handle the reality that nurses trade shifts constantly.</p>
+      </div>
+      <div class="card-block reveal d1">
+        <div class="label">Filter</div>
+        <h3>Vertical-specific, not horizontal.</h3>
+        <p>Economic model legible in one sentence: ShiftCoin values shifts by demand, time, and desirability. Defensible by behavior — once a unit adopts it, the network effect locks in. Regulatory surface is manageable (no PHI stored).</p>
+      </div>
+      <div class="card-block reveal d2">
+        <div class="label">Why now</div>
+        <h3>Post-pandemic nursing shortage.</h3>
+        <p>Burnout is at record highs. The favor economy is collapsing because there are fewer favors to give. Healthcare systems are desperate for retention tools. A platform that makes shift trading fair is a retention tool disguised as scheduling.</p>
+      </div>
+      <div class="card-block reveal d3">
+        <div class="label">Why me</div>
+        <h3>Family in healthcare.</h3>
+        <p>I've watched the group-chat chaos, the guilt trips, the same three people covering every holiday. The problem isn't that nurses don't want to trade — it's that there's no fair system for valuing the trade.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">03 · No-jargon explainer</div>
+    <h2 class="reveal d1 h2-intro">Problem. Solution. Result.</h2>
+    <div class="psr">
+      <div class="step reveal">
+        <div class="label">01 · Problem</div>
+        <div>
+          <h3>Nursing teams trade shifts constantly, but the process is informal, unfair, and exhausting.</h3>
+          <p>Group chats favor the fastest thumb. The favor economy burns out the same people. Managers act as manual intermediaries for every swap. There's no objective valuation of shift desirability — a Friday night ICU shift is not the same as a Tuesday morning clinic shift, but they're treated identically. The result: coverage gaps, resentment, and burnout.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="label">02 · Solution</div>
+        <div>
+          <h3>Build a shift-bartering marketplace with an embedded economy.</h3>
+          <p>ShiftCoin is a virtual currency that prices every shift by five factors: day of week, holiday status, time of day, unit demand, and notice period. A 15-minute Redis reservation lock prevents race conditions. A 4-tier approval matrix routes low-risk trades to instant auto-approval and high-risk trades to manager review. Unit competency gating blocks trades to unqualified nurses. A 24-hour check-in protocol ensures both parties confirm. Anti-gaming detection flags circular trading and collusion.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="label">03 · Result</div>
+        <div>
+          <h3>ShiftGenie 2.0 shipped. HIPAA-aware by architecture. PWA-ready.</h3>
+          <p>Next.js 14 App Router with Server Components reducing client JS by 70%. PostgreSQL 15 with Prisma 5.7 ORM. NextAuth.js with Google OAuth + credentials provider, JWT sessions, bcrypt hashing, role-based access. Zod validation on every input. Upstash Redis for rate limiting and reservation locks. shadcn/ui component library with Radix primitives. PWA-ready with service worker, offline page, and installable manifest. Vitest for unit testing. Vercel Edge deployment. No PHI stored.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="eye reveal">04 · My process</div>
+    <h2 class="reveal d1 h2-intro">How I got here without building the wrong features.</h2>
+    <p class="lede reveal d2">Four habits, applied recursively. The same discipline that kept the build cheap also kept it correct.</p>
+    <div class="cards c2">
+      <div class="card-block reveal">
+        <div class="label">01 · Vertical-first research</div>
+        <h3>The first question wasn't "what should the app do?" but "what does a nursing manager's Monday morning look like?"</h3>
+        <p>The answer: 47 unread texts, 3 no-shows, and a whiteboard that hasn't been updated since Thursday. Every feature is downstream of that observation. The ShiftCoin economy exists because managers shouldn't be debt collectors. The reservation lock exists because <em style="color: var(--accent-bright); font-style: italic;">"I thought I had it"</em> destroys trust.</p>
+      </div>
+      <div class="card-block reveal d1">
+        <div class="label">02 · Scoped agents per domain</div>
+        <h3>Design system · Data model · Auth + security · Business logic · UI components.</h3>
+        <p>Each agent read the vertical brief first, then the domain spec, then wrote code. The approval matrix agent had to know the competency model, but not the Tailwind config. Cross-domain leakage was the biggest risk — each phase's output was the next phase's input, and nothing else.</p>
+      </div>
+      <div class="card-block reveal d2">
+        <div class="label">03 · Knowledge graph as working memory</div>
+        <h3>The vault rendering this page tracked architecture, security, features, and deployment as separate linked nodes.</h3>
+        <p>A new session picks up the relevant subgraph — e.g., just "approval matrix + competency gate + ShiftCoin cost" — as prefix context. The graph is the working memory; the agent is the foreground process.</p>
+      </div>
+      <div class="card-block reveal d3">
+        <div class="label">04 · Token efficiency as a value</div>
+        <h3>The FEATURES.md spec (1,127 lines) was written before the manifest.</h3>
+        <p>Referencing "§2 Reservation Lock" or "§4 Tiered Approval" by section number made every downstream agent self-consistent for free. The 4-tier approval matrix was designed in one session, then referenced by section number in the auth agent, the UI agent, and the notification agent.</p>
+      </div>
+    </div>
+    <div class="process-meta reveal">
+      <div class="label">▸ The recursive proof</div>
+      <p>This portfolio piece was generated by the same harness pipeline at <code>app/harness/</code> that ingests projects: <strong style="color: var(--accent-bright); font-style: normal;">Ingest → Analysis → Portfolio Writer → Validator</strong>. The vault at <code>vault/</code> graphs every design decision and dependency. The same orchestration pattern that built the app is now extracting it. That's the demo.</p>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="wrap">
+    <div class="eye reveal">05 · Architecture</div>
+    <h2 class="reveal d1 h2-intro">Five layers. One marketplace. Zero PHI.</h2>
+    <p class="lede reveal d2">The privacy promise is enforced by omission — there is no patient data layer to leak from.</p>
+    <div class="viz reveal">
+      <div class="viz-cap">▸ Stack diagram · five vertical layers · data flow shown in teal</div>
+      <svg class="viz-svg arch-svg" viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#14b8a6"/>
+          </marker>
+        </defs>
+        <g transform="translate(50, 40)">
+          <rect class="rect" width="800" height="85" rx="2"/>
+          <text class="layer-num" x="16" y="22">L1</text>
+          <text class="layer-name" x="50" y="22">Surface · Next.js App Router + PWA</text>
+          <text class="layer-detail" x="16" y="44">Server Components (RSC/SSC) · App Router · API Routes · Middleware · Server Actions</text>
+          <text class="layer-detail" x="16" y="62">shadcn/ui + Radix primitives · Tailwind CSS · framer-motion · next-pwa · offline.html</text>
+        </g>
+        <path class="arrow" d="M 450 125 L 450 145"/>
+        <g transform="translate(50, 155)">
+          <rect class="rect" width="800" height="70" rx="2"/>
+          <text class="layer-num" x="16" y="22">L2</text>
+          <text class="layer-name" x="50" y="22">State · NextAuth + Zustand + React Query</text>
+          <text class="layer-detail" x="16" y="44">JWT sessions (24h) · Google OAuth + CredentialsProvider · bcryptjs · role injection</text>
+          <text class="layer-detail" x="16" y="60">Zustand (UI state) · TanStack Query (server cache) · React Hook Form + Zod</text>
+        </g>
+        <path class="arrow" d="M 450 225 L 450 245"/>
+        <g transform="translate(50, 255)">
+          <rect class="rect accent" width="800" height="110" rx="2"/>
+          <text class="layer-num" x="16" y="22">L3</text>
+          <text class="layer-name" x="50" y="22">Service Layer · the rules engine</text>
+          <text class="layer-detail" x="16" y="44">ShiftService · TradeService · ShiftCoinService (5-factor valuation + ledger)</text>
+          <text class="layer-detail" x="16" y="62">MatchingEngine (preference + competency + schedule + 0-100 score)</text>
+          <text class="layer-detail" x="16" y="80">CompetencyService · NotificationService (OneSignal push + SMTP email + in-app)</text>
+        </g>
+        <path class="arrow" d="M 450 365 L 450 385"/>
+        <g transform="translate(50, 395)">
+          <rect class="rect" width="800" height="95" rx="2"/>
+          <text class="layer-num" x="16" y="22">L4</text>
+          <text class="layer-name" x="50" y="22">Data · PostgreSQL + Redis · the load-bearing wall</text>
+          <text class="layer-detail" x="16" y="44">PostgreSQL 15 + Prisma 5.7: User · Shift · TradeOffer · TradeRequest · ShiftCoin · Unit · Competency</text>
+          <text class="layer-detail" x="16" y="62">Upstash Redis: rate limiting (@upstash/ratelimit) + 15-min reservation locks (NX/EX)</text>
+          <text class="layer-detail" x="16" y="80">📁 Zero PHI stored · HIPAA by omission · only scheduling data (who, when, where)</text>
+        </g>
+        <path class="arrow" d="M 450 490 L 450 510"/>
+        <g transform="translate(50, 520)">
+          <rect class="rect" width="800" height="70" rx="2"/>
+          <text class="layer-num" x="16" y="22">L5</text>
+          <text class="layer-name" x="50" y="22">Build &amp; Deploy · Vercel Edge</text>
+          <text class="layer-detail" x="16" y="44">Vercel Edge Network · tsc --noEmit · ESLint + Prettier + husky · Vitest · Prisma migrate deploy</text>
+          <text class="layer-detail" x="16" y="60">Env: DATABASE_URL · NEXTAUTH_URL/SECRET · GOOGLE_CLIENT_ID · SMTP · UPSTASH_REDIS</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">06 · Stakeholder views</div>
+    <h2 class="reveal d1 h2-intro">Five people. Five opinions on what this system owes them.</h2>
+    <p class="lede reveal d2">Every feature is a negotiation. Every tradeoff is visible to someone. If I can't explain why it works for all five lenses, the architecture is wrong.</p>
+    <div class="detector-list">
+      <div class="detector reveal">
+        <div class="num">01</div>
+        <div>
+          <h4>Customer (Nurse)</h4>
+          <p class="desc">I want to trade my shift without begging in a group chat. I want to know what my shift is actually worth — a holiday night shift is worth more than a Tuesday morning. I want to know the person taking my shift is qualified for the unit. I want to get paid in ShiftCoin that I can spend on better shifts later. And I want it to work on my phone, offline, without installing an app from a store.</p>
+        </div>
+      </div>
+      <div class="detector reveal d1">
+        <div class="num">02</div>
+        <div>
+          <h4>Business (Hospital / Unit)</h4>
+          <p class="desc">Retention is cheaper than recruitment. A nurse who can trade shifts fairly is a nurse who stays. The platform replaces manager hours spent on phone calls and spreadsheets. ShiftCoin creates an internal economy that costs nothing real — it's virtual currency, not payroll. The approval matrix means managers only see the trades that actually need eyes.</p>
+        </div>
+      </div>
+      <div class="detector reveal d2">
+        <div class="num">03</div>
+        <div>
+          <h4>Operations (Nurse Manager)</h4>
+          <p class="desc">I need to see pending approvals, staffing alerts, and competency gaps at a glance. I need to override auto-approvals when the unit is critically short. I need audit logs for every trade in case something goes wrong. I need the system to flag suspicious patterns — circular trading, collusion, account sharing — without me watching manually.</p>
+        </div>
+      </div>
+      <div class="detector reveal d3">
+        <div class="num">04</div>
+        <div>
+          <h4>Legal &amp; Privacy</h4>
+          <p class="desc">HIPAA compliance is non-negotiable. The platform stores no PHI — no patient names, no medical records, no diagnoses. It stores only scheduling data: who, when, where. The architecture makes HIPAA compliance trivial by omission. Audit logs track every trade, every approval, every ShiftCoin transaction for compliance review.</p>
+        </div>
+      </div>
+      <div class="detector reveal d4">
+        <div class="num">05</div>
+        <div>
+          <h4>Growth</h4>
+          <p class="desc">Network effect: one unit adopting the platform creates pressure on adjacent units to join. The playbook is unit-by-unit within a hospital, then hospital-by-hospital within a network. The ShiftCoin economy is the moat — once a unit's culture shifts to valuing shifts in coins, switching platforms means rebuilding the economy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">07 · Feature deep dive</div>
+    <h2 class="reveal d1 h2-intro">Seven core features. Each has a reason. Each has a tradeoff.</h2>
+    <div class="bento">
+      <div class="feat s3 reveal">
+        <div class="num">01 · SHIFT ECONOMY</div>
+        <h3>ShiftCoin — fair shift valuation</h3>
+        <p>Virtual currency prices every shift by five factors: day of week (weekend 1.5×), holiday status (2.0×), time of day (night 1.5×), unit demand (high 1.3×), and notice period (urgency penalty &lt;7 days). Nurses earn ShiftCoin by working desirable shifts and spend it to trade out of undesirable ones.</p>
+        <span class="tech">TypeScript · 5-factor formula</span>
+        <div class="witty">A Friday night ICU shift is not a Tuesday morning clinic shift. The math finally agrees.</div>
+      </div>
+      <div class="feat s3 reveal d1">
+        <div class="num">02 · RACE CONDITIONS</div>
+        <h3>15-minute Redis reservation lock</h3>
+        <p>Prevents race conditions when two nurses claim the same shift. Redis SET NX/EX pattern creates an exclusive 15-minute window. ShiftCoin balance is held during reservation. Lock auto-releases on expiry or completion.</p>
+        <span class="tech">Upstash Redis · NX/EX</span>
+        <div class="witty">Two nurses can't hold the same shift. Physics and Redis agree.</div>
+      </div>
+      <div class="feat s2 reveal d2">
+        <div class="num">03 · APPROVAL</div>
+        <h3>4-tier risk-based matrix</h3>
+        <p>Auto-approve low-risk trades. Manager notification for medium risk. Manual approval for high risk. Admin override for critical issues.</p>
+        <span class="tech">RBAC · 4 tiers</span>
+        <div class="witty">The system knows which trades need a manager and which just need a timestamp.</div>
+      </div>
+      <div class="feat s2 reveal d3">
+        <div class="num">04 · SAFETY</div>
+        <h3>Unit competency gating</h3>
+        <p>Trades blocked if requesting nurse lacks required competency. Manager-verified skill levels with certification expiry tracking.</p>
+        <span class="tech">Prisma · validation</span>
+        <div class="witty">You can't trade into the cardiac unit because you watched a YouTube video once.</div>
+      </div>
+      <div class="feat s2 reveal">
+        <div class="num">05 · RELIABILITY</div>
+        <h3>24-hour check-in protocol</h3>
+        <p>Both parties must confirm 24 hours before the shift via progressive notification schedule. Auto-cancellation with no-show penalty if neither checks in.</p>
+        <span class="tech">Cron · notifications</span>
+        <div class="witty">The shift isn't traded until both people remember it exists.</div>
+      </div>
+      <div class="feat s3 reveal d1">
+        <div class="num">06 · FRAUD DETECTION</div>
+        <h3>Anti-gaming and collusion detection</h3>
+        <p>Detects circular trading (A→B→C→A), collusion patterns, and suspicious account activity. Daily and weekly trade limits per user. Upstash Redis rate limiting on all API endpoints. Automatic account flagging for abuse.</p>
+        <span class="tech">Upstash · pattern detection</span>
+        <div class="witty">If you're trading shifts in a circle, the geometry department wants a word.</div>
+      </div>
+      <div class="feat s3 reveal d2">
+        <div class="num">07 · ACCESS</div>
+        <h3>PWA with offline capability</h3>
+        <p>Installable web app with service worker, offline.html fallback, and background sync. Push notifications via OneSignal. No app store required — nurses add to home screen directly from the browser.</p>
+        <span class="tech">next-pwa · OneSignal</span>
+        <div class="witty">It works in the hospital basement where the cell signal doesn't.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">08 · Deep dive</div>
+    <h2 class="reveal d1 h2-intro">The algorithm. The formula. The reason this isn't just a shift swap.</h2>
+    <div class="algo-grid">
+      <div>
+        <p style="font-size:1.1rem; color:var(--text-soft); line-height:1.65;">
+          ShiftCoin is the soul of the product. Every shift has a base value, then five multipliers adjust it to reflect reality: weekend shifts cost 50% more. Holidays cost 100% more. Night shifts cost 50% more. High-demand units cost 30% more. Urgent trades (less than 7 days notice) carry a penalty. The formula is deterministic — no manager judgment, no favoritism, just math.
+        </p>
+        <div class="math reveal">
+          <span class="v">shiftCoinCost</span> <span class="o">=</span> <span class="v">baseValue</span><br>
+          <span class="o">&nbsp;&nbsp;×</span> <span class="v">weekendMultiplier</span><span class="c">(1.5)</span><br>
+          <span class="o">&nbsp;&nbsp;×</span> <span class="v">holidayMultiplier</span><span class="c">(2.0)</span><br>
+          <span class="o">&nbsp;&nbsp;×</span> <span class="v">timeMultiplier</span><span class="c">(day 1.0 / evening 1.25 / night 1.5)</span><br>
+          <span class="o">&nbsp;&nbsp;×</span> <span class="v">demandMultiplier</span><span class="c">(low 0.8 / medium 1.0 / high 1.3)</span><br>
+          <span class="o">&nbsp;&nbsp;+</span> <span class="v">urgencyPenalty</span><span class="c">(&lt;7 days notice)</span>
+        </div>
+        <p style="font-size:1.1rem; color:var(--text-soft); line-height:1.65; margin-top:1.5rem;">
+          A Friday night ICU shift on a holiday with high demand and 3 days notice is expensive — and that's the point. The cost signals that this shift is valuable, and the nurse who takes it earns enough ShiftCoin to trade out of three undesirable shifts later. The economy self-balances.
+        </p>
+      </div>
+      <div>
+        <p style="font-size:1.1rem; color:var(--text-soft); line-height:1.65;">
+          The 4-tier approval matrix routes trades based on three risk signals: same-unit vs cross-unit, competency match confidence, and notice period. Most trades are auto-approved in under a second. The minority that need eyes get them. Managers aren't buried in approvals — they're alerted only when something matters.
+        </p>
+        <div class="math reveal">
+          <span class="c">Tier 1 · Auto-approve</span><br>
+          <span class="v">same-unit</span> <span class="o">+</span> <span class="v">qualified</span> <span class="o">+</span> <span class="v">7+ days notice</span><br>
+          <span style="color:var(--text-faint); font-style:italic; font-size:0.85rem;">→ Instant approval, no manager involved</span><br><br>
+          <span class="c">Tier 2 · Manager notification</span><br>
+          <span class="v">cross-unit</span> <span class="o">or</span> <span class="v">short notice</span><br>
+          <span style="color:var(--text-faint); font-style:italic; font-size:0.85rem;">→ Awareness alert, trade proceeds</span><br><br>
+          <span class="c">Tier 3 · Manual approval</span><br>
+          <span class="v">unusual pattern</span> <span class="o">or</span> <span class="v">marginal competency</span><br>
+          <span style="color:var(--text-faint); font-style:italic; font-size:0.85rem;">→ Manager must review and approve</span><br><br>
+          <span class="c">Tier 4 · Admin override</span><br>
+          <span class="v">system anomaly</span> <span class="o">or</span> <span class="v">flagged account</span><br>
+          <span style="color:var(--text-faint); font-style:italic; font-size:0.85rem;">→ Escalated to administrator</span>
+        </div>
+        <p style="font-size:1.1rem; color:var(--text-soft); line-height:1.65; margin-top:1.5rem;">
+          The competency gate runs <em>before</em> ShiftCoin is deducted. The reservation lock runs <em>before</em> the trade is created. The approval matrix runs <em>before</em> the notification is sent. Every gate is in the right order.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">09 · Exhibit</div>
+    <div class="exhibit">
+      <div class="label">▸ Decision · fairness beats speed</div>
+      <h3 class="reveal d1">When two nurses click the same shift in the same second</h3>
+      <p class="story reveal d2">
+        The most common failure mode in shift-trading platforms is the race condition: two nurses see an open shift, both click "Request", and the system accidentally double-allocates. The fix is a Redis reservation lock with SET NX/EX — set only if not exists, expire in 15 minutes. The interesting part isn't the Redis syntax — it's the product decision that "first click gets 15 minutes to decide" is fairer than "fastest thumb wins." The lock holds the nurse's ShiftCoin balance during the reservation, so they can't overcommit. If they don't complete the trade in 15 minutes, the lock auto-releases and the shift goes back to the pool.
+      </p>
+      <div class="code-pair reveal d3">
+        <div class="col before">
+          <span class="tag">BEFORE: naive first-come-first-served</span>
+          <pre>async function requestTrade(tradeOfferId, buyerId) {
+  const trade = await prisma.tradeOffer
+    .findUnique({ where: { id: tradeOfferId } });
+  // Race condition: two requests can pass
+  // this check before either writes
+  if (trade.status === 'AVAILABLE') {
+    await prisma.tradeOffer.update({
+      where: { id: tradeOfferId },
+      data: { status: 'RESERVED', buyerId }
+    });
+    return { success: true };
+  }
+  return { success: false };
+}</pre>
+        </div>
+        <div class="col after">
+          <span class="tag">AFTER: Redis SET NX/EX reservation lock</span>
+          <pre>async function requestTrade(tradeOfferId, buyerId) {
+  const lockKey = `trade:lock:${tradeOfferId}`;
+  const lock = {
+    tradeOfferId, buyerId,
+    reservedAt: new Date(),
+    expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+    shiftCoinHold: trade.shiftCoinCost
+  };
+  // NX = only set if not exists
+  // EX = expire in 900 seconds (15 min)
+  const acquired = await redis.set(
+    lockKey, JSON.stringify(lock),
+    'NX', 'EX', 15 * 60
+  );
+  if (acquired !== 'OK') {
+    return { success: false,
+      reason: 'ALREADY_RESERVED' };
+  }
+  // Deduct hold from buyer balance
+  await shiftCoinService.hold(buyerId,
+    trade.shiftCoinCost);
+  return { success: true,
+    expiresAt: lock.expiresAt };
+}</pre>
+        </div>
+      </div>
+      <div class="callout reveal d4">
+        <div class="label">▸ Why this matters</div>
+        <p>Including this exhibit because the <em>interesting</em> part is the design choice, not the Redis command. The decision to hold ShiftCoin during the reservation (preventing overcommitment) and the 15-minute auto-expiry (preventing abandoned locks) are product decisions that happen to be implemented in Redis. The technology is trivial; the design is the story.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">10 · Numbers</div>
+    <h2 class="reveal d1 h2-intro">The numbers that tell the story.</h2>
+    <div class="metrics-grid">
+      <div class="metric reveal">
+        <div class="lbl">Client JS Reduction</div>
+        <div class="val">70<span class="unit">%</span></div>
+        <div class="desc">Next.js 14 Server Components reduce client-side JavaScript vs traditional SPA approach. Verified by bundle analysis.</div>
+      </div>
+      <div class="metric reveal d1">
+        <div class="lbl">Reservation Lock</div>
+        <div class="val">15<span class="unit">min</span></div>
+        <div class="desc">Redis NX/EX lock with automatic expiration. Prevents race conditions and abandoned reservations.</div>
+      </div>
+      <div class="metric reveal d2">
+        <div class="lbl">Approval Tiers</div>
+        <div class="val">4</div>
+        <div class="desc">Auto-approve · Manager notification · Manual approval · Admin override. Risk-based routing reduces manager touchpoints.</div>
+      </div>
+      <div class="metric reveal">
+        <div class="lbl">Value Factors</div>
+        <div class="val">5</div>
+        <div class="desc">Day of week · Holiday · Time of day · Unit demand · Notice period. Multiplicative formula with urgency penalty.</div>
+      </div>
+      <div class="metric reveal d1">
+        <div class="lbl">DB Entities</div>
+        <div class="val">7</div>
+        <div class="desc">User · Shift · TradeOffer · TradeRequest · ShiftCoin · Unit · Competency. Prisma 5.7 with type-safe queries.</div>
+      </div>
+      <div class="metric reveal d2">
+        <div class="lbl">PHI Fields</div>
+        <div class="val">0</div>
+        <div class="desc">Zero patient health information. HIPAA compliance by architecture — only scheduling data (who, when, where) is stored.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">11 · Decisions</div>
+    <h2 class="reveal d1 h2-intro">Five questions worth answering slowly.</h2>
+    <p class="lede reveal d2">Short answer first — long answer if you need it.</p>
+    <div class="decisions">
+      <details class="decision reveal">
+        <summary><span class="qnum">Q01</span><span class="q">Why a virtual currency instead of real money?</span><span class="arrow">+</span></summary>
+        <div class="body">
+          <p class="short">Real money turns shift trading into a secondary labor market with payroll, tax, and regulatory complexity. Virtual currency creates the same incentive structure without the legal overhead.</p>
+          <p class="long">ShiftCoin is an internal economy — nurses earn it by working undesirable shifts and spend it to trade out of them. The hospital doesn't pay extra; the currency redistributes desirability, not cash. Real money would require wage-and-hour analysis, tax reporting, and potentially union negotiation. Virtual currency is a behavioral nudge, not a payment system. The 5-factor valuation formula gives objective pricing to subjective preferences.</p>
+        </div>
+      </details>
+      <details class="decision reveal d1">
+        <summary><span class="qnum">Q02</span><span class="q">Why 15 minutes for the reservation lock?</span><span class="arrow">+</span></summary>
+        <div class="body">
+          <p class="short">Long enough to complete the trade form and verify competency. Short enough that an abandoned reservation doesn't block the shift for long.</p>
+          <p class="long">The reservation lock holds the shift exclusively while the nurse verifies their competency, confirms their schedule, and submits the trade request. 5 minutes is too short for a thoughtful decision; 30 minutes is too long if the nurse walks away. 15 minutes is the editorial guess at "time to make a considered choice about taking a shift." The auto-expiry means abandoned locks don't require manual cleanup.</p>
+        </div>
+      </details>
+      <details class="decision reveal d2">
+        <summary><span class="qnum">Q03</span><span class="q">Why 4 approval tiers instead of all-auto or all-manual?</span><span class="arrow">+</span></summary>
+        <div class="body">
+          <p class="short">All-auto is dangerous for patient safety. All-manual buries managers in approvals. The 4-tier matrix routes correctly: low-risk trades happen instantly, high-risk trades get eyes.</p>
+          <p class="long">The approval matrix uses three risk signals: same-unit vs cross-unit trade, competency match confidence, and notice period. Same-unit + qualified + 7+ days notice = auto-approve (tier 1). Cross-unit or short notice = manager notification (tier 2). Unusual pattern or marginal competency = manual approval (tier 3). System anomaly or flagged account = admin override (tier 4). The goal is manager attention only where it's actually needed. A manager who approves 50 routine trades a day will miss the one that matters.</p>
+        </div>
+      </details>
+      <details class="decision reveal d3">
+        <summary><span class="qnum">Q04</span><span class="q">Why no PHI storage?</span><span class="arrow">+</span></summary>
+        <div class="body">
+          <p class="short">Storing PHI would make the platform a HIPAA-covered entity. Not storing PHI makes compliance trivial by omission.</p>
+          <p class="long">The platform only needs to know: which nurse, which unit, which shift time. It never needs to know which patient, which diagnosis, which procedure. By architecting PHI out of the data model from day one, the platform avoids the entire HIPAA compliance surface. If a hospital wants patient-contextual scheduling, that information stays in the hospital's EHR — the platform stores only the competency mapping, not the clinical reasoning.</p>
+        </div>
+      </details>
+      <details class="decision reveal d4">
+        <summary><span class="qnum">Q05</span><span class="q">Why PWA instead of native mobile apps?</span><span class="arrow">+</span></summary>
+        <div class="body">
+          <p class="short">Nurses use hospital devices, personal phones, and desktops. A PWA works on all three without app store approval cycles or platform-specific maintenance.</p>
+          <p class="long">Native apps would require separate iOS and Android builds, app store review processes (1-7 days per release), and platform-specific bug tracking. A PWA installs from the browser, updates instantly on reload, works offline with service workers, and sends push notifications. For a healthcare vertical where IT departments are cautious about app installations, "open in browser, add to home screen" is dramatically lower friction. The tradeoff is reduced access to native APIs — but shift trading doesn't need the camera, accelerometer, or contacts.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">12 · Timeline</div>
+    <h2 class="reveal d1 h2-intro">Five phases. No phase repeated.</h2>
+    <div class="timeline">
+      <div class="phase reveal">
+        <div class="meta">
+          <div class="pnum">Phase 01</div>
+          <div class="ptitle">Foundation — understanding the vertical</div>
+          <div class="mood">Methodical</div>
+        </div>
+        <div>
+          <p class="story">Started with observation, not code. Interviewed a nurse manager about their Monday morning. The answer: 47 unread texts, 3 no-shows, and a whiteboard that hasn't been updated since Thursday. Every feature in the platform is downstream of that observation. Wrote the 1,127-line <code style="font-family:var(--mono); font-size:0.85rem; background:var(--bg-inset); padding:1px 6px; border-radius:2px;">FEATURES.md</code> spec before touching Next.js — the ShiftCoin formula, the 4-tier approval matrix, the reservation lock, the competency gate, and the 24-hour check-in protocol were all decided in prose first.</p>
+          <div class="deliverable">FEATURES.md · 1,127 lines · 9 sections · ShiftCoin formula · approval matrix · reservation lock · competency gate</div>
+        </div>
+      </div>
+      <div class="phase reveal">
+        <div class="meta">
+          <div class="pnum">Phase 02</div>
+          <div class="ptitle">Architecture — security by design</div>
+          <div class="mood">Surgical</div>
+        </div>
+        <div>
+          <p class="story">Wrote <code style="font-family:var(--mono); font-size:0.85rem; background:var(--bg-inset); padding:1px 6px; border-radius:2px;">ARCHITECTURE.md</code> and <code style="font-family:var(--mono); font-size:0.85rem; background:var(--bg-inset); padding:1px 6px; border-radius:2px;">SECURITY.md</code> before writing components. Key decision: no PHI in the data model, ever. This made HIPAA compliance trivial by omission. NextAuth.js with JWT sessions, bcrypt hashing, Google OAuth + credentials provider. RBAC with three roles. Zod validation on every input. Upstash Redis for rate limiting and reservation locks.</p>
+          <div class="deliverable">ARCHITECTURE.md · 616 lines · 4 data-flow diagrams · SECURITY.md · 800 lines · RBAC spec · audit logging</div>
+        </div>
+      </div>
+      <div class="phase reveal">
+        <div class="meta">
+          <div class="pnum">Phase 03</div>
+          <div class="ptitle">Build — Next.js 14 + PostgreSQL + Prisma</div>
+          <div class="mood">Ambitious</div>
+        </div>
+        <div>
+          <p class="story">Implemented the full stack: Next.js 14 App Router with Server Components, PostgreSQL 15 with Prisma 5.7 ORM, shadcn/ui component library, Tailwind CSS with Clinical Modern Palette, Zustand state management, React Hook Form + Zod validation, TanStack Query for server state. Seven core Prisma entities. PWA with service worker and manifest. The App Router + Server Components combination is genuinely transformative for data-heavy dashboards.</p>
+          <div class="deliverable">Next.js 14 codebase · Prisma schema · 7 entities · shadcn/ui components · PWA manifest · service worker</div>
+        </div>
+      </div>
+      <div class="phase reveal">
+        <div class="meta">
+          <div class="pnum">Phase 04</div>
+          <div class="ptitle">Hardening — rate limiting, anti-gaming, PWA polish</div>
+          <div class="mood">Determined</div>
+        </div>
+        <div>
+          <p class="story">Added Upstash Redis for distributed rate limiting and reservation locks. Implemented anti-gaming detection for circular trading and collusion. Polished PWA offline experience with background sync and installable manifest. Added progressive notification schedule for the 24-hour check-in protocol. The difference between a prototype and a production platform is the edge cases: what happens when the nurse's phone dies during a reservation? What happens when two managers approve the same trade simultaneously?</p>
+          <div class="deliverable">Upstash Redis integration · rate limiting · anti-gaming detection · PWA polish · notification schedule</div>
+        </div>
+      </div>
+      <div class="phase reveal">
+        <div class="meta">
+          <div class="pnum">Phase 05</div>
+          <div class="ptitle">Ship — v2.0.0 release</div>
+          <div class="mood">Pragmatic</div>
+        </div>
+        <div>
+          <p class="story">Final pass: type-checking, linting, Vitest unit tests, build verification, Vercel deployment. <code style="font-family:var(--mono); font-size:0.85rem; background:var(--bg-inset); padding:1px 6px; border-radius:2px;">CHANGELOG.md</code> written with semantic versioning. <code style="font-family:var(--mono); font-size:0.85rem; background:var(--bg-inset); padding:1px 6px; border-radius:2px;">DEPLOYMENT.md</code> with step-by-step procedures for Railway/Render/Supabase. Known issues documented honestly (iOS Safari push notifications, occasional offline sync misses, large trade list pagination). "Ship" is a binary state. The known issues list is not shameful — it's honest. Every product that claims zero bugs is either lying or not looking.</p>
+          <div class="deliverable">v2.0.0 release · CHANGELOG.md · DEPLOYMENT.md · Vercel deploy · known issues documented</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eye reveal">13 · Reflection</div>
+    <h2 class="reveal d1 h2-intro">What surprised me. What I'd do differently. What's next.</h2>
+    <div class="reflection-grid">
+      <div class="block reveal">
+        <div class="label">Surprised by</div>
+        <h3>How much the vertical research mattered.</h3>
+        <p>The ShiftCoin formula went through four revisions based on nurse feedback. The original formula had only three factors (day, time, demand). Nurses added holiday and urgency. The 15-minute reservation lock was originally 5 minutes — nurses said that was too short to check their family calendar. The 4-tier approval matrix was originally 2 tiers — managers said they needed more granularity. Building for a vertical you don't personally inhabit requires listening more than you talk.</p>
+      </div>
+      <div class="block reveal d1">
+        <div class="label">Would do differently</div>
+        <h3>Build a small pilot before writing the full spec.</h3>
+        <p>The spec was comprehensive but theoretical. A 2-week pilot with 10 nurses would have surfaced the real pain points faster than the research phase. The competency gating, for example, turned out to be more important than the smart matching engine — but the spec weighted them equally.</p>
+      </div>
+      <div class="block reveal d2">
+        <div class="label">What's next</div>
+        <h3>Native mobile apps, calendar integration, multi-hospital.</h3>
+        <p>Native mobile apps (v2.1.0) for units that prefer app-store distribution. Calendar integration (Google/Outlook) for automatic conflict detection. Advanced analytics dashboard for nurse managers. Multi-hospital support (v2.2.0). Union contract compliance checking — the most requested feature from B2B pilot conversations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="recursive">
+  <div class="wrap">
+    <div class="eye reveal">14 · That's it</div>
+    <h2 class="reveal d1">EverShift exists because nursing teams deserve better than group-chat chaos and favor-economy burnout.</h2>
+    <p class="cta-line reveal d2">ShiftCoin makes shift value objective. The reservation lock makes trading fair. The approval matrix makes oversight efficient. Competency gating makes patient safety automatic. And the PWA makes it work on whatever device is in the nurse's pocket.</p>
+    <div class="reveal d3">
+      <a class="cta" href="#architecture">See the architecture again</a>
+    </div>
+    <div class="next reveal">Next: EverSiteAudit — the same discipline applied to website quality assurance, where the stakes aren't patient safety but search ranking and conversion rate.</div>
+  </div>
+</footer>
+
+<div class="integrity">
+  <div class="row">
+    <strong>Verbatim quotes</strong> — ShiftCoin formula, reservation lock implementation, 4-tier approval matrix, color tokens, and 70% client JS reduction claim are quoted verbatim from source files listed in <code>project.manifest.json</code>. Test framework: <em>vitest ^1.1.0</em> (package.json), not Jest as README claims — discrepancy noted. Known issues (iOS Safari push notifications, offline sync misses, pagination) listed verbatim from CHANGELOG.md. No PHI stored — HIPAA by omission per ARCHITECTURE.md and SECURITY.md.
+  </div>
+</div>
+
+<script>
+(() => {
+  const targets = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  targets.forEach(t => obs.observe(t));
+})();
+</script>
+</body>
+</html>
